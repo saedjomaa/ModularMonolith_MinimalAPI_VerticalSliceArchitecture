@@ -15,6 +15,9 @@ public static class SharedServiceExtensions
         return services;
     }
 
+    /*
+     تسجيل الـ Handlers تلقائي: الدالة AddIntegrationEventHandlersFrom(assembly) في SharedServiceExtensions.cs تبحث عن كل Handler في الوحدة وتسجّله في DI. كل وحدة تستدعيها في دالة AddXModule.
+     */
     /// <summary>
     /// Registers every <see cref="IIntegrationEventHandler{TEvent}"/> found in <paramref name="assembly"/> as scoped.
     /// </summary>

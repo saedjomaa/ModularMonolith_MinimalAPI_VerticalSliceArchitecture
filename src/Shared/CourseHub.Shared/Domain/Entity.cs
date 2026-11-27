@@ -1,5 +1,13 @@
 namespace CourseHub.Shared.Domain;
 
+/*
+     هذا هو الكلاس الأساسي لأي كيان. الكيان شيء له هوية ثابتة (Id)، مثل كورس أو فاتورة أو طالب.
+    ما يقدمه:
+    الخاصية Id: من نوع عام TId، فيمكن أن تكون Guid أو غيره. وهي protected init، أي تُحدَّد مرة واحدة عند الإنشاء، ولا يمكن تغييرها من خارج الكيان.
+    مُنشئان (Constructors):
+    Entity(TId id): للإنشاء من الكود.
+    Entity() بدون معاملات: يحتاجه EF Core عند قراءة الكيان من قاعدة البيانات.
+*/
 /// <summary>
 /// Base class for entities. Two entities are equal when they have the same type and id.
 /// </summary>
