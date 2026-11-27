@@ -23,7 +23,7 @@ Arabic version: `../../Phases.txt`.
 **Goal:** a solution that builds and runs, with no business logic.
 
 - Create `ModularMonolith_VerticalSliceArchitecture.slnx`, `Directory.Build.props`, `Directory.Packages.props`, `.gitignore`, `.editorconfig`.
-- Create `CourseHub.Api` with OpenAPI + Swagger UI, and `appsettings.Development.json` with the LocalDB connection string.
+- Create `CourseHub.Api` with OpenAPI + Scalar, and `appsettings.Development.json` with the LocalDB connection string.
 - Create `CourseHub.Shared`, containing:
   - `Entity`, `AggregateRoot`, `Result`, `Error`.
   - `IEndpoint` with assembly scanning.
@@ -32,12 +32,12 @@ Arabic version: `../../Phases.txt`.
 - Create empty module and Contracts projects for all five modules, each with an `Add<X>Module` extension.
 - Create an empty `CourseHub.ArchitectureTests` project with the dependency rules from `Architecture.md` §3.
 
-**Verify:** `dotnet build` passes, `dotnet test` passes (architecture tests), the API runs, and `/swagger` opens.
+**Verify:** `dotnet build` passes, `dotnet test` passes (architecture tests), the API runs, and `/scalar` opens.
 
 **Result:**
 - Build: 0 warnings, 0 errors.
 - Tests: 21 architecture tests pass. A deliberate violation was confirmed to fail, then removed.
-- Runtime: `/health` returns 200, `/openapi/v1.json` returns 200, and `/swagger` opens.
+- Runtime: `/health` returns 200, `/openapi/v1.json` returns 200, and `/scalar` opens. Swagger UI was replaced by Scalar after review.
 - Notes for later phases:
   - Route groups: `/users`, `/courses`, `/enrollments`, `/billing`, `/notifications`.
   - The built-in Minimal API validation (`AddValidation()`) is not registered yet. It will be added in Phase 2 together with the first validated `Request`.

@@ -10,7 +10,7 @@
 
 - `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.EntityFrameworkCore.Design`
 - `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
-- `Microsoft.AspNetCore.OpenApi` + `Swashbuckle.AspNetCore.SwaggerUI`
+- `Microsoft.AspNetCore.OpenApi` + `Scalar.AspNetCore` (API reference UI; no Swashbuckle)
 - Tests: `xunit`, `Shouldly` (or `FluentAssertions` only if the user prefers), `NetArchTest.Rules`
 - **No MediatR, no AutoMapper, no Carter.** Handlers are plain classes. Mapping is written by hand. Endpoints are discovered through our own `IEndpoint`.
 - Ask the user before adding any other package.

@@ -4,6 +4,7 @@ using CourseHub.Enrollment;
 using CourseHub.Notifications;
 using CourseHub.Shared;
 using CourseHub.Users;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,7 @@ app.UseStatusCodePages();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "CourseHub API v1"));
+    app.MapScalarApiReference(options => options.WithTitle("CourseHub API"));
 }
 
 app.MapHealthChecks("/health");

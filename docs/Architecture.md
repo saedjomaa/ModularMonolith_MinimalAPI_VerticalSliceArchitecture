@@ -96,4 +96,4 @@ Template simplification: the event bus is in-memory, with no outbox. This is not
 - **Errors**: domain methods return `Result` / `Result<T>`; endpoints map errors to `ProblemDetails`.
 - **Time**: always `TimeProvider` (needed for testable 14-day and 30-minute rules); never `DateTime.Now`.
 - **Background work**: `PaymentTimeoutWorker` (`BackgroundService`) in Billing.
-- **API docs**: OpenAPI document plus Swagger UI in Development.
+- **API docs**: OpenAPI document (`/openapi/v1.json`) plus the Scalar API reference (`/scalar`) in Development.
