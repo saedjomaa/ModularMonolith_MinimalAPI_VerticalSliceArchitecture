@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="NetArchTest.Rules" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Bootstrapper\CourseHub.Api\CourseHub.Api.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Users\CourseHub.Users.Contracts\CourseHub.Users.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Courses\CourseHub.Courses.Contracts\CourseHub.Courses.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Enrollment\CourseHub.Enrollment.Contracts\CourseHub.Enrollment.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Billing\CourseHub.Billing.Contracts\CourseHub.Billing.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\CourseHub.Notifications.Contracts\CourseHub.Notifications.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

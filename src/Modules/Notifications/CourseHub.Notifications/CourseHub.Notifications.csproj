@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\CourseHub.Shared\CourseHub.Shared.csproj" />
+    <ProjectReference Include="..\CourseHub.Notifications.Contracts\CourseHub.Notifications.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\CourseHub.Shared\CourseHub.Shared.csproj" />
+    <ProjectReference Include="..\..\Modules\Users\CourseHub.Users\CourseHub.Users.csproj" />
+    <ProjectReference Include="..\..\Modules\Courses\CourseHub.Courses\CourseHub.Courses.csproj" />
+    <ProjectReference Include="..\..\Modules\Enrollment\CourseHub.Enrollment\CourseHub.Enrollment.csproj" />
+    <ProjectReference Include="..\..\Modules\Billing\CourseHub.Billing\CourseHub.Billing.csproj" />
+    <ProjectReference Include="..\..\Modules\Notifications\CourseHub.Notifications\CourseHub.Notifications.csproj" />
+  </ItemGroup>
+
+</Project>
