@@ -92,8 +92,14 @@ Template simplification: the event bus is in-memory, with no outbox. This is not
 ## 6. Cross-cutting
 
 - **Endpoints**: **Minimal APIs only**, with no MVC Controllers and no Carter. Each slice defines its endpoint in a class implementing `IEndpoint` (in `CourseHub.Shared`). Each module maps its endpoints under a route group, and the Api discovers them by assembly scanning.
-- **Auth**: ASP.NET Core Identity with `MapIdentityApi` (bearer tokens); authorization policies `StudentOnly`, `InstructorOnly`.
-- **Errors**: domain methods return `Result` / `Result<T>`; endpoints map errors to `ProblemDetails`.
+- **Auth**:
+  - ASP.NET Core Identity services with Identity bearer tokens, owned by the Users module.
+  - Users has its own `Register` / `Login` / `RefreshToken` slices; `MapIdentityApi` is **not** used.
+  - Authorization policies are `StudentOnly` and `InstructorOnly`. Their names live in `CourseHub.Shared.Auth`.
+- **Errors**:
+  - Domain methods return `Result` / `Result<T>`, and endpoints map errors with `ToProblem()`.
+  - Every error response has one shape (`ApiProblem`: `code` + `traceId`, plus `errors` with camelCase keys on 400). The same shape covers errors the framework produces itself, through `ProblemDetailsCustomizer` in the Api.
+  - Responses are documented by `ProducesErrors(...)` per slice and `WithStandardResponses()` on the root group. See `Conventions.md` → Errors.
 - **Time**: always `TimeProvider` (needed for testable 14-day and 30-minute rules); never `DateTime.Now`.
 - **Background work**: `PaymentTimeoutWorker` (`BackgroundService`) in Billing.
 - **API docs**: OpenAPI document (`/openapi/v1.json`) plus the Scalar API reference (`/scalar`) in Development.

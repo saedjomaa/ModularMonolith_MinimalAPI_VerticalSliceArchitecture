@@ -51,6 +51,8 @@ public sealed class ModuleBoundaryTests
         var result = Types.InAssembly(Modules.Main[module])
             .That()
             .DoNotHaveName($"{module}Module")
+            .And()
+            .DoNotResideInNamespaceEndingWith(".Infrastructure.Migrations") // EF Core generates public migration classes
             .ShouldNot()
             .BePublic()
             .GetResult();

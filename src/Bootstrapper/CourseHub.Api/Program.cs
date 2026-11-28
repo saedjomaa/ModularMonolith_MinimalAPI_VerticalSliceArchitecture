@@ -1,15 +1,18 @@
+using CourseHub.Api.ErrorHandling;
+using CourseHub.Api.OpenApi;
 using CourseHub.Billing;
 using CourseHub.Courses;
 using CourseHub.Enrollment;
 using CourseHub.Notifications;
 using CourseHub.Shared;
+using CourseHub.Shared.Endpoints;
 using CourseHub.Users;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-builder.Services.AddProblemDetails();
+builder.Services.AddCourseHubOpenApi();
+builder.Services.AddProblemDetails(options => options.CustomizeProblemDetails = ProblemDetailsCustomizer.Apply);
 builder.Services.AddHealthChecks();
 builder.Services.AddSharedServices();
 
@@ -28,12 +31,20 @@ app.UseStatusCodePages();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(options => options.WithTitle("CourseHub API"));
+    app.MapScalarApiReference(options => options
+        .WithTitle("CourseHub API")
+        .AddPreferredSecuritySchemes(OpenApiConfiguration.BearerSchemeName));
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealthChecks("/health");
 
-app.MapUsersModule()
+// One root group so every module's endpoints get the standard responses (400/401/403/500) documented.
+app.MapGroup(string.Empty)
+   .WithStandardResponses()
+   .MapUsersModule()
    .MapCoursesModule()
    .MapEnrollmentModule()
    .MapBillingModule()

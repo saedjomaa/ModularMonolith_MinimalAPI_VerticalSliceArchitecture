@@ -34,6 +34,7 @@ Instructions for AI coding agents working in this repository.
 Run all commands from this folder:
 
 ```powershell
+dotnet tool restore   # installs dotnet-ef (local tool, dotnet-tools.json)
 dotnet build
 dotnet test
 dotnet run --project src/Bootstrapper/CourseHub.Api

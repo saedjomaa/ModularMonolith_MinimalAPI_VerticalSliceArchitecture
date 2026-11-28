@@ -28,7 +28,8 @@ Each rule has an ID. Code comments and tests reference these IDs (e.g. `// ENR-0
 - **USR-02** Email is unique.
 - **USR-03** Roles: `Student`, `Instructor`. New registrations are `Student`.
 - **USR-04** A default instructor account is seeded for development.
-- **USR-05** A student has a profile (full name, email, registration date).
+- **USR-05** A student has a profile (full name, email, phone number, registration date).
+- **USR-06** An existing instructor can promote a user to `Instructor`. There is no separate Admin role.
 
 ### 3.2 Courses
 

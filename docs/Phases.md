@@ -11,7 +11,7 @@ Arabic version: `../../Phases.txt`.
 | # | Phase | Status |
 |---|---|---|
 | 0 | Skeleton | Done (2026-11-27) |
-| 1 | Users | Not started |
+| 1 | Users | Done (2026-11-27) |
 | 2 | Courses | Not started |
 | 3 | Enrollment | Not started |
 | 4 | Billing | Not started |
@@ -40,19 +40,59 @@ Arabic version: `../../Phases.txt`.
 - Runtime: `/health` returns 200, `/openapi/v1.json` returns 200, and `/scalar` opens. Swagger UI was replaced by Scalar after review.
 - Notes for later phases:
   - Route groups: `/users`, `/courses`, `/enrollments`, `/billing`, `/notifications`.
-  - The built-in Minimal API validation (`AddValidation()`) is not registered yet. It will be added in Phase 2 together with the first validated `Request`.
+  - The built-in Minimal API validation (`AddValidation()`) was not registered in Phase 0. It was added in Phase 1.
   - Empty `Domain/`, `Features/` and `Infrastructure/` folders are not created until they hold code.
 
 ## Phase 1 — Users
 
-- Identity with `ApplicationUser`, a `UsersDbContext` (schema `users`), and `MapIdentityApi`.
-- Roles `Student` / `Instructor`; new users get `Student` (USR-03).
+- Identity with `ApplicationUser : IdentityUser<Guid>` and a `UsersDbContext` (schema `users`).
+- Identity **services and bearer tokens**, but **not** `MapIdentityApi`: its `/register` can't take the full name and phone number or assign a role (decided with the user).
+- Custom slices:
+  - `Register` (USR-01…03, 05)
+  - `Login`
+  - `RefreshToken`
+  - `GetMyProfile`
+  - `UpdateMyProfile` (USR-05)
+  - `PromoteToInstructor` (USR-06)
+- Roles `Student` / `Instructor`, seeded by the migration. New users get `Student` (USR-03).
 - Seed a development instructor (USR-04).
-- Student profile slice (USR-05). Add `IUsersApi` in Contracts.
+- Add `IUsersApi` in Contracts.
 - Policies `StudentOnly` and `InstructorOnly`.
 - First migration.
 
 **Verify:** register, log in and get a token; log in as the seeded instructor; a student gets 403 on an instructor endpoint.
+
+**Result:**
+- Build: 0 warnings, 0 errors. Tests: 21 architecture tests pass.
+- Database: 7 Identity tables plus `__EFMigrationsHistory` in schema `users`, with the `Student` and `Instructor` roles.
+- 19 of 19 HTTP checks pass:
+  - register returns 201; a duplicate email returns 409; invalid input returns 400 with field errors
+  - login returns 200; a wrong password returns 401
+  - `/users/me` returns 200 with a token and 401 without one
+  - a profile update returns 204 and is persisted
+  - a student calling the promote endpoint gets 403
+  - the seeded instructor can log in
+  - promote returns 204; promoting again returns 409; an unknown user returns 404
+  - after a refresh, the promoted user's token carries the `Instructor` role
+  - an invalid refresh token returns 401
+- Scalar shows the 6 Users endpoints and a Bearer token field.
+- Added to Shared:
+  - `Auth/Roles`, `Auth/Policies`, `Auth/ClaimsPrincipalExtensions.GetUserId()`
+  - `Handlers/IHandler` with `AddHandlersFrom(assembly)`
+- Tooling: `dotnet-ef` 11.0.0 is installed as a local tool (`dotnet-tools.json`). Run `dotnet tool restore` after cloning.
+- Development only: on startup the API applies the Users migrations and seeds `instructor@coursehub.local` (password in `appsettings.Development.json`).
+- Each module calls `services.AddValidation()` in its own `Add<X>Module`, so the validation source generator sees that module's `Request` records.
+- The architecture visibility test ignores the `*.Infrastructure.Migrations` namespace, because EF generates public migration classes.
+
+**After review: unified error contract** (2026-11-28)
+- One error shape for all non-2xx responses: `code` + `traceId` + `instance`, plus camelCase `errors` on 400. Framework errors are included.
+- Identity password and email errors now appear as field errors.
+- `/users/refresh` returns `Users.InvalidRefreshToken` instead of an empty 401.
+- Every endpoint documents all its responses: `ProducesErrors(...)` per slice, and `WithStandardResponses()` adds 400/401/403/500.
+- Verified:
+  - 9 of 9 error-shape checks pass: validation, weak password, domain field error, 409, 401 wrong password, 401 no token, 403, 404 unknown route, 401 bad refresh token.
+  - The 19 Phase 1 checks still pass.
+  - OpenAPI lists, for example, 204/400/401/403/404/409/500 for promote, with codes in the descriptions.
 
 ## Phase 2 — Courses
 

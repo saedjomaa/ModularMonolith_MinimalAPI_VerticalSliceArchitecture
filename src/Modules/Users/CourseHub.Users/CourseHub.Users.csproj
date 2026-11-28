@@ -5,6 +5,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\CourseHub.Shared\CourseHub.Shared.csproj" />
     <ProjectReference Include="..\CourseHub.Users.Contracts\CourseHub.Users.Contracts.csproj" />
   </ItemGroup>

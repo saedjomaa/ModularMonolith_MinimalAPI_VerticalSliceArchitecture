@@ -32,4 +32,24 @@ public static class SharedServiceExtensions
         services.TryAddEnumerable(registrations);
         return services;
     }
+
+    /*
+     تسجيل الـ Handlers الخاصة بالـ Slices تلقائيًا: كل كلاس يطبّق IHandler يُسجَّل كـ Scoped باسمه هو،
+     فيطلبه الـ Endpoint مباشرة كمعامل في الـ Lambda.
+     */
+    /// <summary>
+    /// Registers every <see cref="Handlers.IHandler"/> found in <paramref name="assembly"/> as a scoped service of its own type.
+    /// </summary>
+    public static IServiceCollection AddHandlersFrom(this IServiceCollection services, Assembly assembly)
+    {
+        var handlerTypes = assembly.DefinedTypes
+            .Where(type => type is { IsAbstract: false, IsInterface: false } && type.IsAssignableTo(typeof(Handlers.IHandler)));
+
+        foreach (var type in handlerTypes)
+        {
+            services.TryAddScoped(type);
+        }
+
+        return services;
+    }
 }
