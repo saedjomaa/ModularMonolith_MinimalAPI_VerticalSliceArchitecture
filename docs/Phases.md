@@ -127,10 +127,10 @@ Arabic version: `../../Phases.txt`.
   - 23 of 23 Phase 2 HTTP checks pass: CRS-01…06, 401/403/404/409, the catalog, visibility, instructor names, and the OpenAPI responses for publish
   - regressions all pass: Phase 1 19 of 19, error shape 9 of 9, login 4 of 4
 - Not verified over HTTP: the concurrency conflict (409 `Courses.ConcurrencyConflict`). It needs two simultaneous writes; it will be covered by tests in Phase 6.
-- Decisions to confirm:
-  - a published course can still be edited (title, description, price, capacity)
-  - price must be greater than 0 (no free courses)
-  - the catalog is public (no sign-in needed)
+- Decisions confirmed by the user and recorded as CRS-07, CRS-08 and CRS-09 in `Requirements.md`:
+  - price greater than 0 (no free courses)
+  - a published course can still be edited
+  - the catalog is public
 
 ## Phase 3 — Enrollment
 
