@@ -12,7 +12,7 @@ Arabic version: `../../Phases.txt`.
 |---|---|---|
 | 0 | Skeleton | Done (2026-11-27) |
 | 1 | Users | Done (2026-11-27) |
-| 2 | Courses | Not started |
+| 2 | Courses | Done (2026-11-28) |
 | 3 | Enrollment | Not started |
 | 4 | Billing | Not started |
 | 5 | Notifications | Not started |
@@ -102,6 +102,35 @@ Arabic version: `../../Phases.txt`.
 - `ICoursesApi` in Contracts (used by Enrollment).
 
 **Verify:** publishing without a price returns 409; publishing with a price succeeds; another instructor gets 403.
+
+**Result:**
+- `Course` aggregate holds every rule:
+  - `Create`, `Update` and `Publish` with owner checks (CRS-05)
+  - a price is required to publish, and a published course can't lose its price (CRS-03)
+  - capacity is between 1 and 10,000 (CRS-04)
+  - price is between 0.01 and 1,000,000, rounded to 2 decimals
+  - `IsVisibleTo` (CRS-06)
+  - `rowversion` for optimistic concurrency, which returns 409 `Courses.ConcurrencyConflict`
+- Slices:
+  - `POST /courses` (instructor)
+  - `PUT /courses/{id}` (owner)
+  - `POST /courses/{id}/publish` (owner)
+  - `GET /courses/mine` (instructor)
+  - `GET /courses` (public, paged, published only)
+  - `GET /courses/{id}` (public; a draft returns 404 to everyone except its owner)
+- First cross-module query: the catalog and course details show the instructor's name through `IUsersApi` (`Courses` → `Users.Contracts`).
+- `ICoursesApi.GetCourseAsync` in Contracts returns id, title, instructor, price, capacity and published flag, for Enrollment and Billing.
+- Added `ClaimsPrincipal.TryGetUserId()` to Shared, for anonymous-friendly endpoints.
+- Database: `courses.Courses` plus its own `__EFMigrationsHistory`. Migrations are applied on startup in Development.
+- Verified:
+  - build has 0 warnings; 21 architecture tests pass
+  - 23 of 23 Phase 2 HTTP checks pass: CRS-01…06, 401/403/404/409, the catalog, visibility, instructor names, and the OpenAPI responses for publish
+  - regressions all pass: Phase 1 19 of 19, error shape 9 of 9, login 4 of 4
+- Not verified over HTTP: the concurrency conflict (409 `Courses.ConcurrencyConflict`). It needs two simultaneous writes; it will be covered by tests in Phase 6.
+- Decisions to confirm:
+  - a published course can still be edited (title, description, price, capacity)
+  - price must be greater than 0 (no free courses)
+  - the catalog is public (no sign-in needed)
 
 ## Phase 3 — Enrollment
 

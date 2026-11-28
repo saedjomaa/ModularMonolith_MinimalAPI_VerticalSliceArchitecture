@@ -39,6 +39,11 @@ Each rule has an ID. Code comments and tests reference these IDs (e.g. `// ENR-0
 - **CRS-04** Capacity is a positive integer = the maximum number of confirmed + pending enrollments.
 - **CRS-05** Only the owning instructor can edit, price or publish a course.
 - **CRS-06** Students see only `Published` courses.
+- Implementation decisions (Phase 2, pending confirmation):
+  - The price is between 0.01 and 1,000,000 with 2 decimals; there are no free courses.
+  - A published course can still be edited, but can't lose its price.
+  - The catalog (`GET /courses`, `GET /courses/{id}`) is public.
+  - A draft returns 404 to everyone except its owner.
 
 ### 3.3 Enrollment
 

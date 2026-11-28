@@ -5,8 +5,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\CourseHub.Shared\CourseHub.Shared.csproj" />
     <ProjectReference Include="..\CourseHub.Courses.Contracts\CourseHub.Courses.Contracts.csproj" />
+    <ProjectReference Include="..\..\Users\CourseHub.Users.Contracts\CourseHub.Users.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
